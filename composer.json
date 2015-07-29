@@ -1,0 +1,32 @@
+{
+	"name": "sunfoxcz/date-utils",
+	"type": "library",
+	"description": "Library for easier working with date intervals.",
+	"keywords": ["date", "time", "datetime", "interval"],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Tomáš Jacík",
+			"email": "tomas.jacik@sunfox.cz",
+			"homepage": "http://sunfox.cz"
+		}
+	],
+	"require": {
+		"php": ">=5.4.4",
+		"nette/utils": "~2.3.0"
+	},
+	"require-dev": {
+		"nette/tester": "~1.5"
+	},
+	"autoload": {
+		"psr-4": {
+			"Sunfox\\DateUtils\\": "src/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"branch-alias": {
+			"dev-master": "0.2-dev"
+		}
+	}
+}
