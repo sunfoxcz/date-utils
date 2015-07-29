@@ -7,6 +7,25 @@ use Nette;
 
 class DateTime extends Nette\Utils\DateTime
 {
+	public static $quarters = [
+		1 => [
+			'start' => 'Y-01-01',
+			'end' => 'Y-03-31',
+		],
+		2 => [
+			'start' => 'Y-04-01',
+			'end' => 'Y-06-30',
+		],
+		3 => [
+			'start' => 'Y-07-01',
+			'end' => 'Y-09-30',
+		],
+		4 => [
+			'start' => 'Y-10-01',
+			'end' => 'Y-12-31',
+		],
+	];
+
 
 	/**
 	 * Get first day of year as DateTime instance
@@ -16,10 +35,7 @@ class DateTime extends Nette\Utils\DateTime
 	 */
 	public static function firstDayOfYear($year = NULL)
 	{
-		if ($year === NULL) {
-			$year = date('Y');
-		}
-
+		$year = self::checkYear($year);
 		return static::from("{$year}-01-01");
 	}
 
@@ -31,10 +47,7 @@ class DateTime extends Nette\Utils\DateTime
 	 */
 	public static function lastDayOfYear($year = NULL)
 	{
-		if ($year === NULL) {
-			$year = date('Y');
-		}
-
+		$year = self::checkYear($year);
 		return static::from("{$year}-12-31");
 	}
 
@@ -46,16 +59,11 @@ class DateTime extends Nette\Utils\DateTime
 	 */
 	public static function firstDayOfQuarter(\DateTime $date = NULL)
 	{
-		if ($date === NULL) {
-			$date = new \DateTime;
-		}
+		$date = self::checkDate($date);
 
-		return static::from($date->format([
-			1 => 'Y-01-01',
-			2 => 'Y-04-01',
-			3 => 'Y-07-01',
-			4 => 'Y-10-01',
-		][ ceil($date->format('n')/3) ]));
+		return static::from($date->format(
+			self::$quarters[ceil($date->format('n') / 3)]['start']
+		));
 	}
 
 	/**
@@ -66,16 +74,11 @@ class DateTime extends Nette\Utils\DateTime
 	 */
 	public static function lastDayOfQuarter(\DateTime $date = NULL)
 	{
-		if ($date === NULL) {
-			$date = new \DateTime;
-		}
+		$date = self::checkDate($date);
 
-		return static::from($date->format([
-			1 => 'Y-03-31',
-			2 => 'Y-06-30',
-			3 => 'Y-09-30',
-			4 => 'Y-12-31',
-		][ ceil($date->format('n')/3) ]));
+		return static::from($date->format(
+			self::$quarters[ceil($date->format('n') / 3)]['end']
+		));
 	}
 
 	/**
@@ -86,10 +89,7 @@ class DateTime extends Nette\Utils\DateTime
 	 */
 	public static function firstDayOfMonth(\DateTime $date = NULL)
 	{
-		if ($date === NULL) {
-			$date = new \DateTime;
-		}
-
+		$date = self::checkDate($date);
 		return static::from($date->format('Y-m-01'));
 	}
 
@@ -101,10 +101,7 @@ class DateTime extends Nette\Utils\DateTime
 	 */
 	public static function lastDayOfMonth(\DateTime $date = NULL)
 	{
-		if ($date === NULL) {
-			$date = new \DateTime;
-		}
-
+		$date = self::checkDate($date);
 		return static::from($date->format('Y-m-t'));
 	}
 
@@ -142,6 +139,22 @@ class DateTime extends Nette\Utils\DateTime
 		}
 
 		return $result;
+	}
+
+	/**
+	 * @internal
+	 */
+	private static function checkYear($year)
+	{
+		return $year === NULL ? date('Y') : $year;
+	}
+
+	/**
+	 * @internal
+	 */
+	private static function checkDate($date)
+	{
+		return $date === NULL ? new \DateTime : $date;
 	}
 
 }
