@@ -15,8 +15,12 @@ class Time implements ITime
 	public function __construct($time)
 	{
 		if (preg_match('/^(?:(?<h>\d+(?:[.,]\d+)?)(?:h|$))?(?:(?<m>\d+(?:[.,]\d+)?)(?:m|$))?(?:(?<s>\d+(?:[.,]\d+)?)(?:s|$))?$/i', trim((string) $time), $m)) {
-			$this->seconds = (int) ($m['h'] * 60 * 60) + (isset($m['m']) ? $m['m'] * 60 : 0) + (isset($m['s']) ? $m['s'] : 0);
-		} elseif (preg_match('/^(\d+):(\d+)(?::(\d{2}))?$/', trim($time), $m)) {
+			$this->seconds = (int) (
+				(str_replace(',', '.', $m['h']) * 60 * 60) +
+				(isset($m['m']) ? str_replace(',', '.', $m['m']) * 60 : 0) +
+				(isset($m['s']) ? str_replace(',', '.', $m['s']) : 0)
+			);
+		} elseif (preg_match('/^(\d+):(\d+)(?::(\d+))?$/', trim($time), $m)) {
 			$this->seconds = ($m[1] * 60 * 60) + ($m[2] * 60) + (isset($m[3]) ? $m[3] : 0);
 		} else {
 			throw new \InvalidArgumentException('Cannot parse time value');
