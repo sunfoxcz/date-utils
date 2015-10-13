@@ -106,6 +106,42 @@ class DateTime extends Nette\Utils\DateTime
 	}
 
 	/**
+	 * Get first day of week as DateTime instance
+	 *
+	 * @param \DateTime|NULL
+	 * @return DateTime
+	 */
+	public static function firstDayOfWeek(\DateTime $date = NULL)
+	{
+		$date = self::checkDate($date);
+		$dayOfWeek = $date->format('N');
+
+		if ($dayOfWeek == 1) {
+			return static::from($date);
+		}
+
+		return static::from($date->format('Y-m-d') . ' -' . ($dayOfWeek - 1) . ' day');
+	}
+
+	/**
+	 * Get last day of week as DateTime instance
+	 *
+	 * @param \DateTime|NULL
+	 * @return DateTime
+	 */
+	public static function lastDayOfWeek(\DateTime $date = NULL)
+	{
+		$date = self::checkDate($date);
+		$dayOfWeek = $date->format('N');
+
+		if ($dayOfWeek == 7) {
+			return static::from($date);
+		}
+
+		return static::from($date->format('Y-m-d') . ' +' . (7 - $dayOfWeek) . ' day');
+	}
+
+	/**
 	 * Get array of DateTime instances, starting by $dateFrom and ending before $dateTo.
 	 * Each instance is incremented by $interval $count times compared to previous. $items
 	 * are added to each instance if provided.
