@@ -161,13 +161,13 @@ class DateTime extends Nette\Utils\DateTime
 		$result = [];
 		while ($currentDate <= $dateTo)
 		{
-			$yearMonth = $currentDate->format('Ym');
-			$result[$yearMonth] = new Nette\Utils\ArrayHash;
-			$result[$yearMonth]->date = clone($currentDate);
+			$intervalKey = self::getIntervalKey($currentDate, $interval);
+			$result[$intervalKey] = new Nette\Utils\ArrayHash;
+			$result[$intervalKey]->date = clone($currentDate);
 
 			if ($items) {
 				foreach ($items as $k => $v) {
-					$result[$yearMonth]->{$k} = $v;
+					$result[$intervalKey]->{$k} = $v;
 				}
 			}
 
@@ -191,6 +191,26 @@ class DateTime extends Nette\Utils\DateTime
 	private static function checkDate($date)
 	{
 		return $date === NULL ? new \DateTime : $date;
+	}
+
+	/**
+	 * @internal
+	 */
+	private static function getIntervalKey($currentDate, $internal)
+	{
+		switch ($internal)
+		{
+			case 'year':
+				return $currentDate->format('Y');
+			case 'month':
+				return $currentDate->format('Ym');
+			case 'week':
+				return $currentDate->format('YW');
+			case 'day':
+				return $currentDate->format('Ymd');
+		}
+
+		throw new \InvalidArgumentException('Unsupported interval');
 	}
 
 }
