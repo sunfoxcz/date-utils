@@ -117,7 +117,7 @@ class DateTime extends Nette\Utils\DateTime
 		$dayOfWeek = $date->format('N');
 
 		if ($dayOfWeek == 1) {
-			return static::from($date);
+			return static::from($date->format('Y-m-d'));
 		}
 
 		return static::from($date->format('Y-m-d') . ' -' . ($dayOfWeek - 1) . ' day');
@@ -135,7 +135,7 @@ class DateTime extends Nette\Utils\DateTime
 		$dayOfWeek = $date->format('N');
 
 		if ($dayOfWeek == 7) {
-			return static::from($date);
+			return static::from($date->format('Y-m-d'));
 		}
 
 		return static::from($date->format('Y-m-d') . ' +' . (7 - $dayOfWeek) . ' day');
