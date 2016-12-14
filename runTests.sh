@@ -18,7 +18,6 @@ php php-parallel-lint/parallel-lint.php -e php,phpt tests
 php code-checker/src/code-checker.php --short-arrays -d src
 php code-checker/src/code-checker.php --short-arrays -d tests
 
-vendor/bin/tester -s -p php5.5 -c tests/php.ini tests
 vendor/bin/tester -s -p php5.6 -c tests/php.ini tests
 vendor/bin/tester -s -p php7.0 -c tests/php.ini tests
 vendor/bin/tester -s -p php7.1 -c tests/php.ini tests
