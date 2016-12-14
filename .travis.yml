@@ -13,8 +13,8 @@ matrix:
 script:
     - php php-parallel-lint/parallel-lint.php -e php,phpt src
     - php php-parallel-lint/parallel-lint.php -e php,phpt tests
-    - php code-checker/src/code-checker.php --short-arrays -d src
-    - php code-checker/src/code-checker.php --short-arrays -d tests
+    - if [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]]; then php code-checker/src/code-checker.php --short-arrays -d src; fi;
+    - if [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]]; then php code-checker/src/code-checker.php --short-arrays -d tests; fi;
     - vendor/bin/tester -s -p php -c tests/php.ini $FLAGS tests
 
 after_failure:
