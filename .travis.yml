@@ -9,23 +9,15 @@ matrix:
     allow_failures:
         - php: hhvm
 
-script:
-    - php php-parallel-lint/parallel-lint.php -e php,phpt src
-    - php php-parallel-lint/parallel-lint.php -e php,phpt tests
-    - if [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]]; then php code-checker/src/code-checker.php --short-arrays -d src; fi;
-    - if [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]]; then php code-checker/src/code-checker.php --short-arrays -d tests; fi;
-    - vendor/bin/tester -s -p php -c tests/php.ini $FLAGS tests
-
-after_failure:
-    # Print *.actual content
-    - for i in $(find tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
-
 before_script:
     # Install Nette Tester, PHP \Pparallel Lint & Code Checker
     - composer install --no-interaction --dev --prefer-source
     - composer create-project --no-interaction jakub-onderka/php-parallel-lint php-parallel-lint ^0.9
-    - composer create-project --no-interaction nette/code-checker code-checker ^2.7
     - if [[ "$TRAVIS_PHP_VERSION" = "7.0" ]]; then FLAGS="-d extension=xdebug.so --coverage coverage.xml --coverage-src src"; fi;
+
+script:
+    - php php-parallel-lint/parallel-lint.php -e php,phpt src tests
+    - vendor/bin/tester -s -p php -c tests/php.ini $FLAGS tests
 
 after_script:
     - |
@@ -33,3 +25,7 @@ after_script:
             wget https://scrutinizer-ci.com/ocular.phar
             php ocular.phar code-coverage:upload --format=php-clover coverage.xml
         fi
+
+after_failure:
+    # Print *.actual content
+    - for i in $(find tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
