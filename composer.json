@@ -16,8 +16,7 @@
 		"nette/utils": "^2.5"
 	},
 	"require-dev": {
-		"nette/tester": "^2.0",
-		"sunfoxcz/coding-standard": "dev-master"
+		"nette/tester": "^2.2"
 	},
 	"autoload": {
 		"psr-4": {

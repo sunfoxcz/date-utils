@@ -26,8 +26,10 @@ after_failure:
 jobs:
     include:
         -   stage: Coding Standard
+            install:
+                - travis_retry composer create-project --no-dev --no-progress --prefer-dist sunfoxcz/coding-standard:dev-master coding-standard
             script:
-                - vendor/bin/ecs check --no-progress-bar src
+                - coding-standard/vendor/bin/ecs check --no-progress-bar src
 
         -   stage: Code Coverage
             script:
