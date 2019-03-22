@@ -25,6 +25,10 @@ after_failure:
 
 jobs:
     include:
+        -   stage: Coding Standard
+            script:
+                - vendor/bin/ecs check --no-progress-bar src
+
         -   stage: Code Coverage
             script:
                 - vendor/bin/tester -p phpdbg tests -s --coverage ./coverage.xml --coverage-src ./src
