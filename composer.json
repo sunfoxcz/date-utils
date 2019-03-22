@@ -16,11 +16,13 @@
 		"nette/utils": "^2.5"
 	},
 	"require-dev": {
-		"nette/tester": "^2.0"
+		"nette/tester": "^2.0",
+		"sunfoxcz/coding-standard": "dev-master"
 	},
 	"autoload": {
 		"psr-4": {
 			"Sunfox\\DateUtils\\": "src/"
 		}
-	}
+	},
+	"minimum-stability": "dev"
 }
