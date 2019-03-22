@@ -17,19 +17,8 @@ final class Time implements ITime
 	 */
 	public function __construct(string $time)
 	{
-		if (preg_match(
-			'/^(?:(?<h>\d+(?:[.,]\d+)?)(?:h|$))?(?:(?<m>\d+(?:[.,]\d+)?)(?:m|$))?(?:(?<s>\d+(?:[.,]\d+)?)(?:s|$))?$/i',
-			trim($time),
-			$m
-		)) {
-			$this->seconds = (int) (
-				(!empty($m['h']) ? str_replace(',', '.', $m['h']) * 60 * 60 : 0) +
-				(!empty($m['m']) ? str_replace(',', '.', $m['m']) * 60 : 0) +
-				(!empty($m['s']) ? str_replace(',', '.', $m['s']) : 0)
-			);
-		} elseif (preg_match('/^(\d+):(\d+)(?::(\d+))?$/', trim($time), $m)) {
-			$this->seconds = ($m[1] * 60 * 60) + ($m[2] * 60) + (!empty($m[3]) ? $m[3] : 0);
-		} else {
+		$this->seconds = $this->parseLetterExpression($time) ?: $this->parseTimeExpression($time);
+		if (!$this->seconds) {
 			throw new InvalidArgumentException('Cannot parse time value');
 		}
 	}
@@ -52,5 +41,33 @@ final class Time implements ITime
 	public function getTime(string $format = self::DEFAULT_FORMAT): string
 	{
 		return (new NativeDateTime("@$this->seconds"))->format($format);
+	}
+
+	private function parseLetterExpression(string $time): int
+	{
+		if (preg_match(
+			'/^(?:(?<h>\d+(?:[.,]\d+)?)(?:h|$))?(?:(?<m>\d+(?:[.,]\d+)?)(?:m|$))?(?:(?<s>\d+(?:[.,]\d+)?)(?:s|$))?$/i',
+			trim($time),
+			$m
+		)) {
+			return (int) (
+				(!empty($m['h']) ? str_replace(',', '.', $m['h']) * 60 * 60 : 0) +
+				(!empty($m['m']) ? str_replace(',', '.', $m['m']) * 60 : 0) +
+				(!empty($m['s']) ? str_replace(',', '.', $m['s']) : 0)
+			);
+		}
+
+		return 0;
+	}
+
+	private function parseTimeExpression(string $time): int
+	{
+		if (preg_match('/^(\d+):(\d+)(?::(\d+))?$/', trim($time), $m)) {
+			return (int) (
+				($m[1] * 60 * 60) + ($m[2] * 60) + (!empty($m[3]) ? $m[3] : 0)
+			);
+		}
+
+		return 0;
 	}
 }
