@@ -1,21 +1,17 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sunfox\DateUtils\Tests;
 
+use InvalidArgumentException;
+use Sunfox\DateUtils\Time;
 use Tester;
 use Tester\Assert;
-use Sunfox\DateUtils\Time;
-
 
 require __DIR__ . '/bootstrap.php';
 
-
 class TimeTest extends Tester\TestCase
 {
-	/**
-	 * @return array
-	 */
-	protected function getLoopArgs()
+	protected function getLoopArgs(): array
 	{
 		return [
 			['12', 43200, 720.0, 12.0, '12:00:00', '12h', 'G\h'],
@@ -42,8 +38,15 @@ class TimeTest extends Tester\TestCase
 	/**
 	 * @dataProvider getLoopArgs
 	 */
-	public function testValid($value, $seconds, $minutes, $hours, $colonString, $unitString, $format)
-	{
+	public function testValid(
+		string $value,
+		int $seconds,
+		float $minutes,
+		float $hours,
+		string $colonString,
+		string $unitString,
+		string $format
+	): void {
 		$time = new Time($value);
 
 		Assert::same($seconds, $time->getSeconds());
@@ -54,13 +57,12 @@ class TimeTest extends Tester\TestCase
 	}
 
 	/**
-	 * @throws LogicException Cannot parse time value
+	 * @throws InvalidArgumentException Cannot parse time value
 	 */
-	public function testInvalid()
+	public function testInvalid(): void
 	{
 		new Time('aaa');
 	}
-
 }
 
 (new TimeTest)->run();

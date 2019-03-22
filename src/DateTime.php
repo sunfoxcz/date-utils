@@ -1,12 +1,17 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sunfox\DateUtils;
 
-use Nette;
+use DateTime as NativeDateTime;
+use InvalidArgumentException;
+use Nette\Utils\ArrayHash;
+use Nette\Utils\DateTime as NetteDateTime;
 
-
-class DateTime extends Nette\Utils\DateTime
+class DateTime extends NetteDateTime
 {
+	/**
+	 * @var array<array>
+	 */
 	public static $quarters = [
 		1 => [
 			'start' => 'Y-01-01',
@@ -26,14 +31,10 @@ class DateTime extends Nette\Utils\DateTime
 		],
 	];
 
-
 	/**
 	 * Get first day of year as DateTime instance
-	 *
-	 * @param int|NULL
-	 * @return DateTime
 	 */
-	public static function firstDayOfYear($year = NULL)
+	public static function firstDayOfYear(?int $year = NULL): self
 	{
 		$year = self::checkYear($year);
 		return static::from("{$year}-01-01");
@@ -41,11 +42,8 @@ class DateTime extends Nette\Utils\DateTime
 
 	/**
 	 * Get last day of year as DateTime instance
-	 *
-	 * @param int|NULL
-	 * @return DateTime
 	 */
-	public static function lastDayOfYear($year = NULL)
+	public static function lastDayOfYear(?int $year = NULL): self
 	{
 		$year = self::checkYear($year);
 		return static::from("{$year}-12-31");
@@ -53,41 +51,26 @@ class DateTime extends Nette\Utils\DateTime
 
 	/**
 	 * Get first day of quarter as DateTime instance
-	 *
-	 * @param \DateTime|NULL
-	 * @return DateTime
 	 */
-	public static function firstDayOfQuarter(\DateTime $date = NULL)
+	public static function firstDayOfQuarter(?NativeDateTime $date = NULL): self
 	{
 		$date = self::checkDate($date);
-
-		return static::from($date->format(
-			self::$quarters[ceil($date->format('n') / 3)]['start']
-		));
+		return static::from($date->format(self::$quarters[(int) ceil((int) $date->format('n') / 3)]['start']));
 	}
 
 	/**
 	 * Get last day of quarter as DateTime instance
-	 *
-	 * @param \DateTime|NULL
-	 * @return DateTime
 	 */
-	public static function lastDayOfQuarter(\DateTime $date = NULL)
+	public static function lastDayOfQuarter(?NativeDateTime $date = NULL): self
 	{
 		$date = self::checkDate($date);
-
-		return static::from($date->format(
-			self::$quarters[ceil($date->format('n') / 3)]['end']
-		));
+		return static::from($date->format(self::$quarters[(int) ceil((int) $date->format('n') / 3)]['end']));
 	}
 
 	/**
 	 * Get first day of month as DateTime instance
-	 *
-	 * @param \DateTime|NULL
-	 * @return DateTime
 	 */
-	public static function firstDayOfMonth(\DateTime $date = NULL)
+	public static function firstDayOfMonth(?NativeDateTime $date = NULL): self
 	{
 		$date = self::checkDate($date);
 		return static::from($date->format('Y-m-01'));
@@ -95,11 +78,8 @@ class DateTime extends Nette\Utils\DateTime
 
 	/**
 	 * Get last day of month as DateTime instance
-	 *
-	 * @param \DateTime|NULL
-	 * @return DateTime
 	 */
-	public static function lastDayOfMonth(\DateTime $date = NULL)
+	public static function lastDayOfMonth(?NativeDateTime $date = NULL): self
 	{
 		$date = self::checkDate($date);
 		return static::from($date->format('Y-m-t'));
@@ -107,16 +87,13 @@ class DateTime extends Nette\Utils\DateTime
 
 	/**
 	 * Get first day of week as DateTime instance
-	 *
-	 * @param \DateTime|NULL
-	 * @return DateTime
 	 */
-	public static function firstDayOfWeek(\DateTime $date = NULL)
+	public static function firstDayOfWeek(?NativeDateTime $date = NULL): self
 	{
 		$date = self::checkDate($date);
-		$dayOfWeek = $date->format('N');
+		$dayOfWeek = (int) $date->format('N');
 
-		if ($dayOfWeek == 1) {
+		if ($dayOfWeek === 1) {
 			return static::from($date->format('Y-m-d'));
 		}
 
@@ -125,16 +102,13 @@ class DateTime extends Nette\Utils\DateTime
 
 	/**
 	 * Get last day of week as DateTime instance
-	 *
-	 * @param \DateTime|NULL
-	 * @return DateTime
 	 */
-	public static function lastDayOfWeek(\DateTime $date = NULL)
+	public static function lastDayOfWeek(?NativeDateTime $date = NULL): self
 	{
 		$date = self::checkDate($date);
-		$dayOfWeek = $date->format('N');
+		$dayOfWeek = (int) $date->format('N');
 
-		if ($dayOfWeek == 7) {
+		if ($dayOfWeek === 7) {
 			return static::from($date->format('Y-m-d'));
 		}
 
@@ -146,24 +120,22 @@ class DateTime extends Nette\Utils\DateTime
 	 * Each instance is incremented by $interval $count times compared to previous. $items
 	 * are added to each instance if provided.
 	 *
-	 * @param \DateTime
-	 * @param \DateTime
-	 * @param string
-	 * @param int
-	 * @param array|NULL
-	 * @return Nette\Utils\ArrayHash[]
+	 * @return ArrayHash[]
 	 */
-	public static function createInterval(\DateTime $dateFrom, \DateTime $dateTo,
-											$interval = 'month', $count = 1, array $items = NULL)
-	{
+	public static function createInterval(
+		NativeDateTime $dateFrom,
+		NativeDateTime $dateTo,
+		string $interval = 'month',
+		int $count = 1,
+		?array $items = NULL
+	): array {
 		$currentDate = static::from($dateFrom);
 
 		$result = [];
-		while ($currentDate <= $dateTo)
-		{
+		while ($currentDate <= $dateTo) {
 			$intervalKey = self::getIntervalKey($currentDate, $interval);
-			$result[$intervalKey] = new Nette\Utils\ArrayHash;
-			$result[$intervalKey]->date = clone($currentDate);
+			$result[$intervalKey] = new ArrayHash;
+			$result[$intervalKey]->date = clone $currentDate;
 
 			if ($items) {
 				foreach ($items as $k => $v) {
@@ -177,29 +149,19 @@ class DateTime extends Nette\Utils\DateTime
 		return $result;
 	}
 
-	/**
-	 * @internal
-	 */
-	private static function checkYear($year)
+	private static function checkYear(?int $year): int
 	{
-		return $year === NULL ? date('Y') : $year;
+		return $year ?: (int) date('Y');
 	}
 
-	/**
-	 * @internal
-	 */
-	private static function checkDate($date)
+	private static function checkDate(?NativeDateTime $date): NativeDateTime
 	{
-		return $date === NULL ? new \DateTime : $date;
+		return $date ?: new NativeDateTime;
 	}
 
-	/**
-	 * @internal
-	 */
-	private static function getIntervalKey($currentDate, $internal)
+	private static function getIntervalKey(self $currentDate, string $internal): string
 	{
-		switch ($internal)
-		{
+		switch ($internal) {
 			case 'year':
 				return $currentDate->format('Y');
 			case 'month':
@@ -210,7 +172,6 @@ class DateTime extends Nette\Utils\DateTime
 				return $currentDate->format('Ymd');
 		}
 
-		throw new \InvalidArgumentException('Unsupported interval');
+		throw new InvalidArgumentException('Unsupported interval');
 	}
-
 }

@@ -1,20 +1,27 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sunfox\DateUtils;
 
+use DateTime as NativeDateTime;
+use InvalidArgumentException;
 
-class Time implements ITime
+final class Time implements ITime
 {
-	/** @var int */
-	protected $seconds = 0;
-
+	/**
+	 * @var int
+	 */
+	private $seconds = 0;
 
 	/**
-	 * @param mixed
+	 * @throws InvalidArgumentException
 	 */
-	public function __construct($time)
+	public function __construct(string $time)
 	{
-		if (preg_match('/^(?:(?<h>\d+(?:[.,]\d+)?)(?:h|$))?(?:(?<m>\d+(?:[.,]\d+)?)(?:m|$))?(?:(?<s>\d+(?:[.,]\d+)?)(?:s|$))?$/i', trim((string) $time), $m)) {
+		if (preg_match(
+			'/^(?:(?<h>\d+(?:[.,]\d+)?)(?:h|$))?(?:(?<m>\d+(?:[.,]\d+)?)(?:m|$))?(?:(?<s>\d+(?:[.,]\d+)?)(?:s|$))?$/i',
+			trim($time),
+			$m
+		)) {
 			$this->seconds = (int) (
 				(!empty($m['h']) ? str_replace(',', '.', $m['h']) * 60 * 60 : 0) +
 				(!empty($m['m']) ? str_replace(',', '.', $m['m']) * 60 : 0) +
@@ -23,41 +30,27 @@ class Time implements ITime
 		} elseif (preg_match('/^(\d+):(\d+)(?::(\d+))?$/', trim($time), $m)) {
 			$this->seconds = ($m[1] * 60 * 60) + ($m[2] * 60) + (!empty($m[3]) ? $m[3] : 0);
 		} else {
-			throw new \InvalidArgumentException('Cannot parse time value');
+			throw new InvalidArgumentException('Cannot parse time value');
 		}
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getSeconds()
+	public function getSeconds(): int
 	{
 		return $this->seconds;
 	}
 
-	/**
-	 * @return float
-	 */
-	public function getMinutes($rounding = self::DEFAULT_ROUNDING)
+	public function getMinutes(int $rounding = self::DEFAULT_ROUNDING): float
 	{
 		return round($this->seconds / 60, $rounding);
 	}
 
-	/**
-	 * @return float
-	 */
-	public function getHours($rounding = self::DEFAULT_ROUNDING)
+	public function getHours(int $rounding = self::DEFAULT_ROUNDING): float
 	{
 		return round($this->seconds / 60 / 60, $rounding);
 	}
 
-	/**
-	 * @param string
-	 * @return string
-	 */
-	public function getTime($format = self::DEFAULT_FORMAT)
+	public function getTime(string $format = self::DEFAULT_FORMAT): string
 	{
-		return (new \DateTime("@$this->seconds"))->format($format);
+		return (new NativeDateTime("@$this->seconds"))->format($format);
 	}
-
 }

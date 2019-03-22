@@ -1,33 +1,17 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sunfox\DateUtils;
 
-
 interface ITime
 {
-	const DEFAULT_FORMAT = 'H:i:s';
-	const DEFAULT_ROUNDING = 2;
+	public const DEFAULT_FORMAT = 'H:i:s';
+	public const DEFAULT_ROUNDING = 2;
 
+	public function getSeconds(): int;
 
-	/**
-	 * @return int
-	 */
-	public function getSeconds();
+	public function getMinutes(int $rounding = self::DEFAULT_ROUNDING): float;
 
-	/**
-	 * @return float
-	 */
-	public function getMinutes($rounding = self::DEFAULT_ROUNDING);
+	public function getHours(int $rounding = self::DEFAULT_ROUNDING): float;
 
-	/**
-	 * @return float
-	 */
-	public function getHours($rounding = self::DEFAULT_ROUNDING);
-
-	/**
-	 * @param string
-	 * @return string
-	 */
-	public function getTime($format = self::DEFAULT_FORMAT);
-
+	public function getTime(string $format = self::DEFAULT_FORMAT): string;
 }
