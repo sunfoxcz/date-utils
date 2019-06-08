@@ -2,6 +2,7 @@
 
 namespace Sunfox\DateUtils\Tests;
 
+use InvalidArgumentException;
 use Sunfox\DateUtils\SpentTime;
 use Tester;
 use Tester\Assert;
@@ -13,10 +14,10 @@ final class SpentTimeTest extends Tester\TestCase
     protected function getLoopArgs(): array
     {
         return [
-            [NULL, 0, 0, 0, 0.0, 0.0, 0, '0m'],
-            ['00:00:00', 0, 0, 0, 0.0, 0.0, 0, '0m'],
-            ['01:00:00', 1, 0, 0, 1.0, 60.0, 3600, '1h'],
-            ['01:30:00', 1, 30, 0, 1.5, 90.0, 5400, '1.5h'],
+            [NULL, TRUE, 0, 0, 0, 0.0, 0.0, 0, '0m'],
+            ['00:00:00', TRUE, 0, 0, 0, 0.0, 0.0, 0, '0m'],
+            ['01:00:00', FALSE, 1, 0, 0, 1.0, 60.0, 3600, '1h'],
+            ['01:30:00', FALSE, 1, 30, 0, 1.5, 90.0, 5400, '1.5h'],
         ];
     }
 
@@ -25,6 +26,7 @@ final class SpentTimeTest extends Tester\TestCase
      */
     public function testOutput(
         ?string $time,
+        bool $isZero,
         int $hours,
         int $minutes,
         int $seconds,
@@ -35,6 +37,7 @@ final class SpentTimeTest extends Tester\TestCase
     ): void {
         $spentTime = new SpentTime($time);
 
+        Assert::same($isZero, $spentTime->isZero());
         Assert::same($hours, $spentTime->getHours());
         Assert::same($minutes, $spentTime->getMinutes());
         Assert::same($seconds, $spentTime->getSeconds());
@@ -50,6 +53,13 @@ final class SpentTimeTest extends Tester\TestCase
         $spentTime2 = new SpentTime('01:15:00');
 
         Assert::same('01:45:00', (string) $spentTime1->add($spentTime2));
+    }
+
+    public function testInvalidInput(): void
+    {
+        Assert::exception(function () {
+            new SpentTime('bad format');
+        }, InvalidArgumentException::class, "Bad time format: 'bad format'.");
     }
 }
 
