@@ -4,17 +4,10 @@ namespace Sunfox\DateUtils;
 
 use DateTime as NativeDateTime;
 use DateTimeInterface;
-use InvalidArgumentException;
-use Nette\Utils\ArrayHash;
 use Nette\Utils\DateTime as NetteDateTime;
 
 class DateTime extends NetteDateTime
 {
-	public const INTERVAL_YEAR = 'year';
-	public const INTERVAL_MONTH = 'month';
-	public const INTERVAL_WEEK = 'week';
-	public const INTERVAL_DAY = 'day';
-
 	/**
 	 * @var array<array>
 	 */
@@ -121,40 +114,6 @@ class DateTime extends NetteDateTime
 		return static::from($date->format('Y-m-d') . ' +' . (7 - $dayOfWeek) . ' day');
 	}
 
-	/**
-	 * Get array of DateTime instances, starting by $dateFrom and ending before $dateTo.
-	 * Each instance is incremented by $interval $count times compared to previous. $items
-	 * are added to each instance if provided.
-	 *
-	 * @return ArrayHash[]
-	 */
-	public static function createInterval(
-		DateTimeInterface $dateFrom,
-		DateTimeInterface $dateTo,
-		string $interval = 'month',
-		int $count = 1,
-		?array $items = NULL
-	): array {
-		$currentDate = static::from($dateFrom);
-
-		$result = [];
-		while ($currentDate <= $dateTo) {
-			$intervalKey = self::getIntervalKey($currentDate, $interval);
-			$result[$intervalKey] = new ArrayHash;
-			$result[$intervalKey]->date = clone $currentDate;
-
-			if ($items) {
-				foreach ($items as $k => $v) {
-					$result[$intervalKey]->{$k} = $v;
-				}
-			}
-
-			$currentDate->modify("+{$count} {$interval}");
-		}
-
-		return $result;
-	}
-
 	private static function checkYear(?int $year): int
 	{
 		return $year ?: (int) date('Y');
@@ -163,21 +122,5 @@ class DateTime extends NetteDateTime
 	private static function checkDate(?DateTimeInterface $date): DateTimeInterface
 	{
 		return $date ?: new NativeDateTime;
-	}
-
-	private static function getIntervalKey(self $currentDate, string $internal): string
-	{
-		switch ($internal) {
-			case self::INTERVAL_YEAR:
-				return $currentDate->format('Y');
-			case self::INTERVAL_MONTH:
-				return $currentDate->format('Ym');
-			case self::INTERVAL_WEEK:
-				return $currentDate->format('YW');
-			case self::INTERVAL_DAY:
-				return $currentDate->format('Ymd');
-		}
-
-		throw new InvalidArgumentException('Unsupported interval');
 	}
 }

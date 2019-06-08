@@ -14,17 +14,18 @@ composer require sunfoxcz/date-utils
 
 ## Usage
 
-### DateTime::createInterval()
+### IntervalFactory::createInterval()
 
 ```php
 <?php declare(strict_types=1);
 
 use Sunfox\DateUtils\DateTime;
+use Sunfox\DateUtils\DateIntervalFactory;
 
 $start = new DateTime('2015-01-01');
 $end = new DateTime('2015-12-31');
 
-$months = DateTime::createInterval($start, $end, DateTime::INTERVAL_MONTH, 1, [
+$months = DateIntervalFactory::create($start, $end, DateIntervalFactory::MONTH, 1, [
 	'incomes' => [],
 	'expenses' => [],
 ]);
