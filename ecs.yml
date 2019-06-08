@@ -7,3 +7,4 @@ parameters:
     skip:
         # For now
         SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingTraversableParameterTypeHintSpecification: ~
+        Symplify\CodingStandard\Fixer\Commenting\RemoveUselessDocBlockFixer: ~
