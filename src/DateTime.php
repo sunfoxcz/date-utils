@@ -3,6 +3,7 @@
 namespace Sunfox\DateUtils;
 
 use DateTime as NativeDateTime;
+use DateTimeInterface;
 use InvalidArgumentException;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\DateTime as NetteDateTime;
@@ -57,7 +58,7 @@ class DateTime extends NetteDateTime
 	/**
 	 * Get first day of quarter as DateTime instance
 	 */
-	public static function firstDayOfQuarter(?NativeDateTime $date = NULL): self
+	public static function firstDayOfQuarter(?DateTimeInterface $date = NULL): self
 	{
 		$date = self::checkDate($date);
 		return static::from($date->format(self::$quarters[(int) ceil((int) $date->format('n') / 3)]['start']));
@@ -66,7 +67,7 @@ class DateTime extends NetteDateTime
 	/**
 	 * Get last day of quarter as DateTime instance
 	 */
-	public static function lastDayOfQuarter(?NativeDateTime $date = NULL): self
+	public static function lastDayOfQuarter(?DateTimeInterface $date = NULL): self
 	{
 		$date = self::checkDate($date);
 		return static::from($date->format(self::$quarters[(int) ceil((int) $date->format('n') / 3)]['end']));
@@ -75,7 +76,7 @@ class DateTime extends NetteDateTime
 	/**
 	 * Get first day of month as DateTime instance
 	 */
-	public static function firstDayOfMonth(?NativeDateTime $date = NULL): self
+	public static function firstDayOfMonth(?DateTimeInterface $date = NULL): self
 	{
 		$date = self::checkDate($date);
 		return static::from($date->format('Y-m-01'));
@@ -84,7 +85,7 @@ class DateTime extends NetteDateTime
 	/**
 	 * Get last day of month as DateTime instance
 	 */
-	public static function lastDayOfMonth(?NativeDateTime $date = NULL): self
+	public static function lastDayOfMonth(?DateTimeInterface $date = NULL): self
 	{
 		$date = self::checkDate($date);
 		return static::from($date->format('Y-m-t'));
@@ -93,7 +94,7 @@ class DateTime extends NetteDateTime
 	/**
 	 * Get first day of week as DateTime instance
 	 */
-	public static function firstDayOfWeek(?NativeDateTime $date = NULL): self
+	public static function firstDayOfWeek(?DateTimeInterface $date = NULL): self
 	{
 		$date = self::checkDate($date);
 		$dayOfWeek = (int) $date->format('N');
@@ -108,7 +109,7 @@ class DateTime extends NetteDateTime
 	/**
 	 * Get last day of week as DateTime instance
 	 */
-	public static function lastDayOfWeek(?NativeDateTime $date = NULL): self
+	public static function lastDayOfWeek(?DateTimeInterface $date = NULL): self
 	{
 		$date = self::checkDate($date);
 		$dayOfWeek = (int) $date->format('N');
@@ -128,8 +129,8 @@ class DateTime extends NetteDateTime
 	 * @return ArrayHash[]
 	 */
 	public static function createInterval(
-		NativeDateTime $dateFrom,
-		NativeDateTime $dateTo,
+		DateTimeInterface $dateFrom,
+		DateTimeInterface $dateTo,
 		string $interval = 'month',
 		int $count = 1,
 		?array $items = NULL
@@ -159,7 +160,7 @@ class DateTime extends NetteDateTime
 		return $year ?: (int) date('Y');
 	}
 
-	private static function checkDate(?NativeDateTime $date): NativeDateTime
+	private static function checkDate(?DateTimeInterface $date): DateTimeInterface
 	{
 		return $date ?: new NativeDateTime;
 	}
