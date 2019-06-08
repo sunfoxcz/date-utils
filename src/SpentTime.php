@@ -95,12 +95,12 @@ class SpentTime
 		$sum->minutes = $this->minutes + $add->getMinutes();
 		$sum->seconds = $this->seconds + $add->getSeconds();
 
-		if ($sum->seconds > 60) {
+		if ($sum->seconds >= 60) {
 			$sum->minutes += (int) floor($sum->seconds / 60);
 			$sum->seconds %= 60;
 		}
 
-		if ($sum->minutes > 60) {
+		if ($sum->minutes >= 60) {
 			$sum->hours += (int) floor($sum->minutes / 60);
 			$sum->minutes %= 60;
 		}

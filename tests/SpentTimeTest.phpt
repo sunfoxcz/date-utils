@@ -49,10 +49,10 @@ final class SpentTimeTest extends Tester\TestCase
 
     public function testAdd(): void
     {
-        $spentTime1 = new SpentTime('00:30:00');
-        $spentTime2 = new SpentTime('01:15:00');
+        $spentTime1 = new SpentTime('01:30:30');
+        $spentTime2 = new SpentTime('01:45:30');
 
-        Assert::same('01:45:00', (string) $spentTime1->add($spentTime2));
+        Assert::same('03:16:00', (string) $spentTime1->add($spentTime2));
     }
 
     public function testInvalidInput(): void
