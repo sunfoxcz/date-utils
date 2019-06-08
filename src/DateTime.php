@@ -9,6 +9,11 @@ use Nette\Utils\DateTime as NetteDateTime;
 
 class DateTime extends NetteDateTime
 {
+	public const INTERVAL_YEAR = 'year';
+	public const INTERVAL_MONTH = 'month';
+	public const INTERVAL_WEEK = 'week';
+	public const INTERVAL_DAY = 'day';
+
 	/**
 	 * @var array<array>
 	 */
@@ -162,14 +167,18 @@ class DateTime extends NetteDateTime
 	private static function getIntervalKey(self $currentDate, string $internal): string
 	{
 		switch ($internal) {
-			case 'year':
+			case self::INTERVAL_YEAR:
 				return $currentDate->format('Y');
-			case 'month':
+				break;
+			case self::INTERVAL_MONTH:
 				return $currentDate->format('Ym');
-			case 'week':
+				break;
+			case self::INTERVAL_WEEK:
 				return $currentDate->format('YW');
-			case 'day':
+				break;
+			case self::INTERVAL_DAY:
 				return $currentDate->format('Ymd');
+				break;
 		}
 
 		throw new InvalidArgumentException('Unsupported interval');

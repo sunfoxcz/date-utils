@@ -24,7 +24,7 @@ use Sunfox\DateUtils\DateTime;
 $start = new DateTime('2015-01-01');
 $end = new DateTime('2015-12-31');
 
-$months = DateTime::createInterval($start, $end, 'month', 1, [
+$months = DateTime::createInterval($start, $end, DateTime::INTERVAL_MONTH, 1, [
 	'incomes' => [],
 	'expenses' => [],
 ]);
