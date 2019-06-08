@@ -33,6 +33,11 @@ jobs:
             script:
                 - coding-standard/vendor/bin/ecs check --no-progress-bar src
 
+        -   stage: PHPStan
+            php: 7.3
+            script:
+                - vendor/bin/phpstan analyse -l max -c phpstan.neon src
+
         -   stage: Code Coverage
             php: 7.3
             script:

@@ -51,9 +51,9 @@ final class Time implements ITime
 			$m
 		)) {
 			return (int) (
-				(!empty($m['h']) ? str_replace(',', '.', $m['h']) * 60 * 60 : 0) +
-				(!empty($m['m']) ? str_replace(',', '.', $m['m']) * 60 : 0) +
-				(!empty($m['s']) ? str_replace(',', '.', $m['s']) : 0)
+				(!empty($m['h']) ? (float) str_replace(',', '.', $m['h']) * 60 * 60 : 0) +
+				(!empty($m['m']) ? (float) str_replace(',', '.', $m['m']) * 60 : 0) +
+				(!empty($m['s']) ? (float) str_replace(',', '.', $m['s']) : 0)
 			);
 		}
 
