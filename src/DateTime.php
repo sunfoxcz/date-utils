@@ -169,16 +169,12 @@ class DateTime extends NetteDateTime
 		switch ($internal) {
 			case self::INTERVAL_YEAR:
 				return $currentDate->format('Y');
-				break;
 			case self::INTERVAL_MONTH:
 				return $currentDate->format('Ym');
-				break;
 			case self::INTERVAL_WEEK:
 				return $currentDate->format('YW');
-				break;
 			case self::INTERVAL_DAY:
 				return $currentDate->format('Ymd');
-				break;
 		}
 
 		throw new InvalidArgumentException('Unsupported interval');
