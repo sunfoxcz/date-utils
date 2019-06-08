@@ -1,7 +1,7 @@
 # DateUtils library
 
 [![Build Status](https://travis-ci.org/sunfoxcz/date-utils.svg?branch=master)](https://travis-ci.org/sunfoxcz/date-utils)
-[![Code Coverage](https://scrutinizer-ci.com/g/sunfoxcz/date-utils/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/sunfoxcz/date-utils/?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/sunfoxcz/date-utils/badge.svg?branch=master)](https://coveralls.io/github/sunfoxcz/date-utils?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sunfoxcz/date-utils/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sunfoxcz/date-utils/?branch=master)
 
 Library for easier working with date intervals.
