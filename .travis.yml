@@ -1,9 +1,8 @@
 language: php
 php:
-    - 7.1
     - 7.2
     - 7.3
-    - 7.4snapshot
+    - 7.4
 
 env:
     - COMPOSER_EXTRA_ARGS=""
@@ -27,19 +26,19 @@ after_failure:
 jobs:
     include:
         -   stage: Coding Standard
-            php: 7.3
+            php: 7.4
             install:
                 - travis_retry composer create-project --no-dev --no-progress --prefer-dist sunfoxcz/coding-standard:dev-master coding-standard
             script:
                 - coding-standard/vendor/bin/ecs check --no-progress-bar src
 
         -   stage: PHPStan
-            php: 7.3
+            php: 7.4
             script:
                 - vendor/bin/phpstan analyse -l max -c phpstan.neon src
 
         -   stage: Code Coverage
-            php: 7.3
+            php: 7.4
             script:
                 - vendor/bin/tester -p phpdbg tests -s --coverage ./coverage.xml --coverage-src ./src
             after_script:
@@ -48,7 +47,7 @@ jobs:
 
     allow_failures:
         - stage: Code Coverage
-        - php: 7.4snapshot
+        - php: 7.4
 
 sudo: false
 
