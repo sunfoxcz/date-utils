@@ -14,7 +14,7 @@ composer require sunfoxcz/date-utils
 
 ## Usage
 
-### IntervalFactory::createInterval()
+### DateIntervalFactory
 
 ```php
 <?php declare(strict_types=1);
@@ -35,7 +35,7 @@ foreach ($months as $k => $month) {
 }
 ```
 
-### SpentTime()
+### SpentTime
 
 ```php
 <?php declare(strict_types=1);
