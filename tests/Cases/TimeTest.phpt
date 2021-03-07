@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Sunfox\DateUtils\Tests;
+namespace SunfoxTests\DateUtils\Cases;
 
 use InvalidArgumentException;
 use Sunfox\DateUtils\Time;
 use Tester;
 use Tester\Assert;
 
-require __DIR__ . '/bootstrap.php';
+require __DIR__ . '/../bootstrap.php';
 
 class TimeTest extends Tester\TestCase
 {

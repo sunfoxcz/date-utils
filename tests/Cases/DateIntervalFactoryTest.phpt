@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Sunfox\DateUtils\Tests;
+namespace SunfoxTests\DateUtils\Cases;
 
 use DateTime as NativeDateTime;
 use InvalidArgumentException;
@@ -10,7 +10,7 @@ use Sunfox\DateUtils\DateTime;
 use Tester;
 use Tester\Assert;
 
-require __DIR__ . '/bootstrap.php';
+require __DIR__ . '/../bootstrap.php';
 
 final class DateIntervalFactoryTest extends Tester\TestCase
 {
