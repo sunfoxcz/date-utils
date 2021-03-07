@@ -17,7 +17,7 @@ install:
     - travis_retry composer update --no-progress --no-suggest --prefer-dist $COMPOSER_EXTRA_ARGS
 
 script:
-    - vendor/bin/tester -s tests
+    - vendor/bin/tester -s -p php -c tests/php.ini tests
 
 after_failure:
     # Print *.actual content
@@ -27,15 +27,13 @@ jobs:
     include:
         -   stage: Coding Standard
             php: 7.4
-            install:
-                - travis_retry composer create-project --no-dev --no-progress --prefer-dist sunfoxcz/coding-standard:dev-master coding-standard
             script:
-                - coding-standard/vendor/bin/ecs check --no-progress-bar src
+                - vendor/bin/ecs check --no-progress-bar --ansi src tests
 
         -   stage: PHPStan
             php: 7.4
             script:
-                - vendor/bin/phpstan analyse -l max -c phpstan.neon src
+                - vendor/bin/phpstan analyse -l 7 -c phpstan.neon src tests
 
         -   stage: Code Coverage
             php: 7.4
