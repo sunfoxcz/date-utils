@@ -17,7 +17,7 @@
 	"require-dev": {
 		"ext-json": "*",
 		"nette/tester": "^2.4",
-		"sunfoxcz/coding-standard": "^2.0",
+		"sunfoxcz/coding-standard": "dev-master",
 		"phpstan/phpstan": "^0.12"
 	},
 	"autoload": {
@@ -31,7 +31,7 @@
 		}
 	},
 	"scripts": {
-		"tests": "vendor/bin/tester -s -p php -c tests/php.ini tests/Cases",
+		"tests": "vendor/bin/tester -s -p php tests/Cases",
 		"cs": "vendor/bin/ecs check --no-progress-bar --ansi src tests",
 		"csfix": "vendor/bin/ecs check --no-progress-bar --ansi --fix src tests",
 		"phpstan": "vendor/bin/phpstan analyse --no-progress --ansi -c phpstan.neon -l max src tests"
