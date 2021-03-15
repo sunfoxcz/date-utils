@@ -33,7 +33,7 @@ final class DateIntervalFactory
         while ($currentDate <= $dateTo) {
             $intervalKey = self::getIntervalKey($currentDate, $interval);
             $result[$intervalKey] = new ArrayHash;
-            $result[$intervalKey]->date = clone $currentDate;
+            $result[$intervalKey]->date = $currentDate;
 
             if ($items) {
                 foreach ($items as $k => $v) {
@@ -41,7 +41,7 @@ final class DateIntervalFactory
                 }
             }
 
-            $currentDate->modify("+{$count} {$interval}");
+            $currentDate = $currentDate->modify("+{$count} {$interval}");
         }
 
         return $result;

@@ -5,7 +5,7 @@ namespace Sunfox\DateUtils;
 use DateTime as NativeDateTime;
 use DateTimeInterface;
 
-class DateTime extends \DateTime implements \JsonSerializable
+class DateTime extends \DateTimeImmutable implements \JsonSerializable
 {
 	/** minute in seconds */
 	public const MINUTE = 60;
@@ -205,15 +205,5 @@ class DateTime extends \DateTime implements \JsonSerializable
 	public function __toString(): string
 	{
 		return $this->format('Y-m-d H:i:s');
-	}
-
-	/**
-	 * Creates a copy with a modified time.
-	 * @return static
-	 */
-	public function modifyClone(string $modify = '')
-	{
-		$dolly = clone $this;
-		return $modify ? $dolly->modify($modify) : $dolly;
 	}
 }
