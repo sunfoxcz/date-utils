@@ -33,6 +33,7 @@
 	},
 	"scripts": {
 		"tests": "vendor/bin/tester -s -p php -C tests/Cases",
+		"coverage": "vendor/bin/tester -s -p phpdbg -C --coverage ./coverage.xml --coverage-src ./src tests/Cases",
 		"cs": "vendor/bin/ecs check --no-progress-bar --ansi src tests",
 		"csfix": "vendor/bin/ecs check --no-progress-bar --ansi --fix src tests",
 		"phpstan": "vendor/bin/phpstan analyse --no-progress --ansi -c phpstan.neon -l max src tests"
