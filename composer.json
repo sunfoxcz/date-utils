@@ -32,7 +32,7 @@
 		}
 	},
 	"scripts": {
-		"tests": "vendor/bin/tester -s -p php tests/Cases",
+		"tests": "vendor/bin/tester -s -p php -C tests/Cases",
 		"cs": "vendor/bin/ecs check --no-progress-bar --ansi src tests",
 		"csfix": "vendor/bin/ecs check --no-progress-bar --ansi --fix src tests",
 		"phpstan": "vendor/bin/phpstan analyse --no-progress --ansi -c phpstan.neon -l max src tests"
