@@ -49,9 +49,9 @@ final class DateIntervalFactory
         return $result;
     }
 
-    private static function getIntervalKey(DateTime $currentDate, string $internal): string
+    private static function getIntervalKey(DateTime $currentDate, string $interval): string
     {
-        switch ($internal) {
+        switch ($interval) {
             case self::YEAR:
                 return $currentDate->format('Y');
             case self::MONTH:
