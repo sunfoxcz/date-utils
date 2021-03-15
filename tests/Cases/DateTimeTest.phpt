@@ -11,6 +11,122 @@ require __DIR__ . '/../bootstrap.php';
 
 final class DateTimeTest extends Tester\TestCase
 {
+	public function testFrom(): void
+	{
+		Assert::same('1978-01-23 11:40:00', (string) DateTime::from(254400000));
+		Assert::same('1978-01-23 11:40:00', (string) (new DateTime)->setTimestamp(254400000));
+		Assert::same(254400000, DateTime::from(254400000)->getTimestamp());
+
+		Assert::same(time() + 60, (int) DateTime::from(60)->format('U'));
+		Assert::same('2050-08-13 11:40:00', (string) DateTime::from(2544000000));
+		Assert::same('2050-08-13 11:40:00', (string) (new DateTime)->setTimestamp(2544000000));
+		Assert::same(is_int(2544000000) ? 2544000000 : '2544000000', DateTime::from(2544000000)->getTimestamp()); // 64 bit
+
+		Assert::same('1978-05-05 00:00:00', (string) DateTime::from('1978-05-05'));
+
+		Assert::same((new \Datetime)->format('Y-m-d H:i:s'), (string) DateTime::from(null));
+
+		Assert::type(DateTime::class, DateTime::from(new \DateTime('1978-05-05')));
+
+		Assert::same('1978-05-05 12:00:00.123450', DateTime::from(new DateTime('1978-05-05 12:00:00.12345'))->format('Y-m-d H:i:s.u'));
+	}
+
+	public function testFromParts(): void
+	{
+		Assert::same('0001-12-09 00:00:00.000000', DateTime::fromParts(1, 12, 9)->format('Y-m-d H:i:s.u'));
+		Assert::same('0085-12-09 00:00:00.000000', DateTime::fromParts(85, 12, 9)->format('Y-m-d H:i:s.u'));
+		Assert::same('1985-01-01 00:00:00.000000', DateTime::fromParts(1985, 1, 1)->format('Y-m-d H:i:s.u'));
+		Assert::same('1985-12-19 00:00:00.000000', DateTime::fromParts(1985, 12, 19)->format('Y-m-d H:i:s.u'));
+		Assert::same('1985-12-09 01:02:00.000000', DateTime::fromParts(1985, 12, 9, 1, 2)->format('Y-m-d H:i:s.u'));
+		Assert::same('1985-12-09 01:02:03.000000', DateTime::fromParts(1985, 12, 9, 1, 2, 3)->format('Y-m-d H:i:s.u'));
+		Assert::same('1985-12-09 11:22:33.000000', DateTime::fromParts(1985, 12, 9, 11, 22, 33)->format('Y-m-d H:i:s.u'));
+		Assert::same('1985-12-09 11:22:59.123000', DateTime::fromParts(1985, 12, 9, 11, 22, 59.123)->format('Y-m-d H:i:s.u'));
+
+		Assert::exception(function () {
+			DateTime::fromParts(1985, 2, 29);
+		}, \InvalidArgumentException::class, "Invalid date '1985-02-29 00:00:0.00000'");
+
+		Assert::exception(function () { // year must be at least 1 due to limitation of checkdate()
+			DateTime::fromParts(0, 12, 9);
+		}, \InvalidArgumentException::class);
+
+		Assert::exception(function () {
+			DateTime::fromParts(1985, 0, 9);
+		}, \InvalidArgumentException::class);
+
+		Assert::exception(function () {
+			DateTime::fromParts(1985, 13, 9);
+		}, \InvalidArgumentException::class);
+
+		Assert::exception(function () {
+			DateTime::fromParts(1985, 12, 0);
+		}, \InvalidArgumentException::class);
+
+		Assert::exception(function () {
+			DateTime::fromParts(1985, 12, 32);
+		}, \InvalidArgumentException::class);
+
+		Assert::exception(function () {
+			DateTime::fromParts(1985, 12, 9, -1);
+		}, \InvalidArgumentException::class);
+
+		Assert::exception(function () {
+			DateTime::fromParts(1985, 12, 9, 60);
+		}, \InvalidArgumentException::class);
+
+		Assert::exception(function () {
+			DateTime::fromParts(1985, 12, 9, 0, -1);
+		}, \InvalidArgumentException::class);
+
+		Assert::exception(function () {
+			DateTime::fromParts(1985, 12, 9, 0, 60);
+		}, \InvalidArgumentException::class);
+
+		Assert::exception(function () {
+			DateTime::fromParts(1985, 12, 9, 0, 0, -1);
+		}, \InvalidArgumentException::class);
+
+		Assert::exception(function () {
+			DateTime::fromParts(1985, 12, 9, 0, 0, 60);
+		}, \InvalidArgumentException::class);
+	}
+
+	public function testCreateFromFormat(): void
+	{
+		Assert::type(DateTime::class, DateTime::createFromFormat('Y-m-d H:i:s', '2050-08-13 11:40:00'));
+		Assert::type(DateTime::class, DateTime::createFromFormat('Y-m-d H:i:s', '2050-08-13 11:40:00', new \DateTimeZone('Europe/Prague')));
+
+		Assert::same('2050-08-13 11:40:00.123450', DateTime::createFromFormat('Y-m-d H:i:s.u', '2050-08-13 11:40:00.12345')->format('Y-m-d H:i:s.u'));
+
+		Assert::same('Europe/Prague', DateTime::createFromFormat('Y', '2050')->getTimezone()->getName());
+		Assert::same('Europe/Bratislava', DateTime::createFromFormat('Y', '2050', 'Europe/Bratislava')->getTimezone()->getName());
+
+		Assert::error(function () {
+			DateTime::createFromFormat('Y-m-d H:i:s', '2050-08-13 11:40:00', 5);
+		}, \InvalidArgumentException::class, 'Invalid timezone given');
+
+		Assert::false(DateTime::createFromFormat('Y-m-d', '2014-10'));
+	}
+
+	public function testJSON(): void
+	{
+		Assert::same('"1978-01-23T11:40:00+01:00"', json_encode(DateTime::from(254400000)));
+	}
+
+	public function testModifyClone(): void
+	{
+		$date = DateTime::from(254400000);
+		$dolly = $date->modifyClone();
+		Assert::type(DateTime::class, $dolly);
+		Assert::notSame($date, $dolly);
+		Assert::same((string) $date, (string) $dolly);
+
+		$dolly2 = $date->modifyClone('+1 hour');
+		Assert::type(DateTime::class, $dolly2);
+		Assert::notSame($date, $dolly2);
+		Assert::notSame((string) $date, (string) $dolly2);
+	}
+
 	public function testFirstDayOfMonth(): void
 	{
 		Assert::type(DateTime::class, DateTime::firstDayOfMonth(new NativeDateTime('2015-01-15')));
