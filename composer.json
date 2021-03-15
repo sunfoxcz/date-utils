@@ -35,5 +35,10 @@
 		"cs": "vendor/bin/ecs check --no-progress-bar --ansi src tests",
 		"csfix": "vendor/bin/ecs check --no-progress-bar --ansi --fix src tests",
 		"phpstan": "vendor/bin/phpstan analyse -l max -c phpstan.neon src tests"
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "3.0-dev"
+		}
 	}
 }
