@@ -1,8 +1,7 @@
 language: php
 php:
-    - 7.2
-    - 7.3
     - 7.4
+    - 8.0
 
 env:
     - COMPOSER_EXTRA_ARGS=""
@@ -45,7 +44,7 @@ jobs:
 
     allow_failures:
         - stage: Code Coverage
-        - php: 7.4
+        - php: 8.0
 
 sudo: false
 
