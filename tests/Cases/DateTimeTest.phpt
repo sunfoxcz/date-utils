@@ -42,53 +42,28 @@ final class DateTimeTest extends Tester\TestCase
 		Assert::same('1985-12-09 11:22:33.000000', DateTime::fromParts(1985, 12, 9, 11, 22, 33)->format('Y-m-d H:i:s.u'));
 		Assert::same('1985-12-09 11:22:59.123000', DateTime::fromParts(1985, 12, 9, 11, 22, 59.123)->format('Y-m-d H:i:s.u'));
 
-		Assert::exception(function () {
-			DateTime::fromParts(1985, 2, 29);
-		}, \InvalidArgumentException::class, "Invalid date '1985-02-29 00:00:0.00000'");
+		Assert::exception(
+			fn() => DateTime::fromParts(1985, 2, 29),
+			\InvalidArgumentException::class,
+			"Invalid date '1985-02-29 00:00:0.00000'"
+		);
 
-		Assert::exception(function () { // year must be at least 1 due to limitation of checkdate()
-			DateTime::fromParts(0, 12, 9);
-		}, \InvalidArgumentException::class);
+		Assert::exception(
+			// year must be at least 1 due to limitation of checkdate()
+			fn() => DateTime::fromParts(0, 12, 9),
+			\InvalidArgumentException::class
+		);
 
-		Assert::exception(function () {
-			DateTime::fromParts(1985, 0, 9);
-		}, \InvalidArgumentException::class);
-
-		Assert::exception(function () {
-			DateTime::fromParts(1985, 13, 9);
-		}, \InvalidArgumentException::class);
-
-		Assert::exception(function () {
-			DateTime::fromParts(1985, 12, 0);
-		}, \InvalidArgumentException::class);
-
-		Assert::exception(function () {
-			DateTime::fromParts(1985, 12, 32);
-		}, \InvalidArgumentException::class);
-
-		Assert::exception(function () {
-			DateTime::fromParts(1985, 12, 9, -1);
-		}, \InvalidArgumentException::class);
-
-		Assert::exception(function () {
-			DateTime::fromParts(1985, 12, 9, 60);
-		}, \InvalidArgumentException::class);
-
-		Assert::exception(function () {
-			DateTime::fromParts(1985, 12, 9, 0, -1);
-		}, \InvalidArgumentException::class);
-
-		Assert::exception(function () {
-			DateTime::fromParts(1985, 12, 9, 0, 60);
-		}, \InvalidArgumentException::class);
-
-		Assert::exception(function () {
-			DateTime::fromParts(1985, 12, 9, 0, 0, -1);
-		}, \InvalidArgumentException::class);
-
-		Assert::exception(function () {
-			DateTime::fromParts(1985, 12, 9, 0, 0, 60);
-		}, \InvalidArgumentException::class);
+		Assert::exception(fn() => DateTime::fromParts(1985, 0, 9), \InvalidArgumentException::class);
+		Assert::exception(fn() => DateTime::fromParts(1985, 13, 9), \InvalidArgumentException::class);
+		Assert::exception(fn() => DateTime::fromParts(1985, 12, 0), \InvalidArgumentException::class);
+		Assert::exception(fn() => DateTime::fromParts(1985, 12, 32), \InvalidArgumentException::class);
+		Assert::exception(fn() => DateTime::fromParts(1985, 12, 9, -1), \InvalidArgumentException::class);
+		Assert::exception(fn() => DateTime::fromParts(1985, 12, 9, 60), \InvalidArgumentException::class);
+		Assert::exception(fn() => DateTime::fromParts(1985, 12, 9, 0, -1), \InvalidArgumentException::class);
+		Assert::exception(fn() => DateTime::fromParts(1985, 12, 9, 0, 60), \InvalidArgumentException::class);
+		Assert::exception(fn() => DateTime::fromParts(1985, 12, 9, 0, 0, -1), \InvalidArgumentException::class);
+		Assert::exception(fn() => DateTime::fromParts(1985, 12, 9, 0, 0, 60), \InvalidArgumentException::class);
 	}
 
 	public function testCreateFromFormat(): void
@@ -101,9 +76,11 @@ final class DateTimeTest extends Tester\TestCase
 		Assert::same('Europe/Prague', DateTime::createFromFormat('Y', '2050')->getTimezone()->getName());
 		Assert::same('Europe/Bratislava', DateTime::createFromFormat('Y', '2050', 'Europe/Bratislava')->getTimezone()->getName());
 
-		Assert::error(function () {
-			DateTime::createFromFormat('Y-m-d H:i:s', '2050-08-13 11:40:00', 5);
-		}, \InvalidArgumentException::class, 'Invalid timezone given');
+		Assert::error(
+			fn() => DateTime::createFromFormat('Y-m-d H:i:s', '2050-08-13 11:40:00', 5),
+			\InvalidArgumentException::class,
+			'Invalid timezone given'
+		);
 
 		Assert::false(DateTime::createFromFormat('Y-m-d', '2014-10'));
 	}

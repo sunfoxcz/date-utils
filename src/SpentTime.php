@@ -22,9 +22,9 @@ class SpentTime
 	 */
 	private $seconds = 0;
 
-	public function __construct(?string $time = NULL)
+	public function __construct(?string $time = null)
 	{
-		if ($time === NULL) {
+		if ($time === null) {
 			return;
 		}
 

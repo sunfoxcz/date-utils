@@ -101,7 +101,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 	/**
 	 * Get first day of year as DateTime instance
 	 */
-	public static function firstDayOfYear(?DateTimeInterface $date = NULL): self
+	public static function firstDayOfYear(?DateTimeInterface $date = null): self
 	{
 		$date = self::checkDate($date);
 		return static::from(sprintf('%04d-01-01', $date->format('Y')));
@@ -110,7 +110,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 	/**
 	 * Get last day of year as DateTime instance
 	 */
-	public static function lastDayOfYear(?DateTimeInterface $date = NULL): self
+	public static function lastDayOfYear(?DateTimeInterface $date = null): self
 	{
 		$date = self::checkDate($date);
 		return static::from(sprintf('%04d-12-31', $date->format('Y')));
@@ -119,7 +119,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 	/**
 	 * Get first day of quarter as DateTime instance
 	 */
-	public static function firstDayOfQuarter(?DateTimeInterface $date = NULL): self
+	public static function firstDayOfQuarter(?DateTimeInterface $date = null): self
 	{
 		$date = self::checkDate($date);
 		$quarter = (int) ceil((int) $date->format('n') / 3);
@@ -130,7 +130,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 	/**
 	 * Get last day of quarter as DateTime instance
 	 */
-	public static function lastDayOfQuarter(?DateTimeInterface $date = NULL): self
+	public static function lastDayOfQuarter(?DateTimeInterface $date = null): self
 	{
 		$date = self::checkDate($date);
 		$quarter = (int) ceil((int) $date->format('n') / 3);
@@ -141,7 +141,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 	/**
 	 * Get first day of month as DateTime instance
 	 */
-	public static function firstDayOfMonth(?DateTimeInterface $date = NULL): self
+	public static function firstDayOfMonth(?DateTimeInterface $date = null): self
 	{
 		$date = self::checkDate($date);
 		return static::from($date->format('Y-m-01'));
@@ -150,7 +150,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 	/**
 	 * Get last day of month as DateTime instance
 	 */
-	public static function lastDayOfMonth(?DateTimeInterface $date = NULL): self
+	public static function lastDayOfMonth(?DateTimeInterface $date = null): self
 	{
 		$date = self::checkDate($date);
 		return static::from($date->format('Y-m-t'));
@@ -159,7 +159,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 	/**
 	 * Get first day of week as DateTime instance
 	 */
-	public static function firstDayOfWeek(?DateTimeInterface $date = NULL): self
+	public static function firstDayOfWeek(?DateTimeInterface $date = null): self
 	{
 		$date = self::checkDate($date);
 		$dayOfWeek = (int) $date->format('N');
@@ -179,7 +179,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 	/**
 	 * Get last day of week as DateTime instance
 	 */
-	public static function lastDayOfWeek(?DateTimeInterface $date = NULL): self
+	public static function lastDayOfWeek(?DateTimeInterface $date = null): self
 	{
 		$date = self::checkDate($date);
 		$dayOfWeek = (int) $date->format('N');
