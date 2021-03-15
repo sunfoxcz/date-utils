@@ -9,28 +9,6 @@ use Nette\Utils\DateTime as NetteDateTime;
 class DateTime extends NetteDateTime
 {
 	/**
-	 * @var array<array>
-	 */
-	public static $quarters = [
-		1 => [
-			'start' => 'Y-01-01',
-			'end' => 'Y-03-31',
-		],
-		2 => [
-			'start' => 'Y-04-01',
-			'end' => 'Y-06-30',
-		],
-		3 => [
-			'start' => 'Y-07-01',
-			'end' => 'Y-09-30',
-		],
-		4 => [
-			'start' => 'Y-10-01',
-			'end' => 'Y-12-31',
-		],
-	];
-
-	/**
 	 * Get first day of year as DateTime instance
 	 */
 	public static function firstDayOfYear(?int $year = NULL): self
@@ -54,7 +32,9 @@ class DateTime extends NetteDateTime
 	public static function firstDayOfQuarter(?DateTimeInterface $date = NULL): self
 	{
 		$date = self::checkDate($date);
-		return static::from($date->format(self::$quarters[(int) ceil((int) $date->format('n') / 3)]['start']));
+		$quarter = (int) ceil((int) $date->format('n') / 3);
+		$format = sprintf('first day of %04d-%02d', $date->format('Y'), $quarter * 3 - 2);
+		return static::from($format);
 	}
 
 	/**
@@ -63,7 +43,9 @@ class DateTime extends NetteDateTime
 	public static function lastDayOfQuarter(?DateTimeInterface $date = NULL): self
 	{
 		$date = self::checkDate($date);
-		return static::from($date->format(self::$quarters[(int) ceil((int) $date->format('n') / 3)]['end']));
+		$quarter = (int) ceil((int) $date->format('n') / 3);
+		$format = sprintf('last day of %04d-%02d', $date->format('Y'), $quarter * 3);
+		return static::from($format);
 	}
 
 	/**
