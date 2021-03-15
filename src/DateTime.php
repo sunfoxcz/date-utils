@@ -171,6 +171,11 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 		return static::from($date->format('Y-m-d') . ' -' . ($dayOfWeek - 1) . ' day');
 	}
 
+	final public function __construct(string $datetime = 'now', ?\DateTimeZone $timezone = null)
+	{
+		parent::__construct($datetime, $timezone);
+	}
+
 	/**
 	 * Get last day of week as DateTime instance
 	 */

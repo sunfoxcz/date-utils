@@ -18,6 +18,8 @@ final class DateIntervalFactory
      * Each instance is incremented by $interval $count times compared to previous.
      * $items are added to each instance if provided.
      *
+     * @param array<string, mixed>|null $items
+     *
      * @return ArrayHash[]
      */
     public static function create(
