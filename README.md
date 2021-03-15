@@ -1,8 +1,15 @@
 # DateUtils library
 
-[![Build Status](https://travis-ci.org/sunfoxcz/date-utils.svg?branch=master)](https://travis-ci.org/sunfoxcz/date-utils)
-[![Coverage Status](https://coveralls.io/repos/github/sunfoxcz/date-utils/badge.svg?branch=master)](https://coveralls.io/github/sunfoxcz/date-utils?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sunfoxcz/date-utils/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sunfoxcz/date-utils/?branch=master)
+<p align=center>
+    <a href="https://github.com/sunfoxcz/date-utils/actions"><img src="https://badgen.net/github/checks/sunfoxcz/date-utils/master?cache=300"></a>
+    <a href="https://coveralls.io/github/sunfoxcz/date-utils"><img src="https://badgen.net/coveralls/c/github/sunfoxcz/date-utils?cache=300"></a>
+    <a href="https://github.com/sunfoxcz/date-utils"><img src="https://badgen.net/github/license/sunfoxcz/date-utils"></a>
+</p>
+<p align=center>
+    <a href="https://packagist.org/packages/sunfoxcz/date-utils"><img src="https://badgen.net/packagist/dm/sunfoxcz/date-utils"></a>
+    <a href="https://packagist.org/packages/sunfoxcz/date-utils"><img src="https://badgen.net/packagist/v/sunfoxcz/date-utils"></a>
+    <a href="https://packagist.org/packages/sunfoxcz/date-utils"><img src="https://badgen.net/packagist/php/sunfoxcz/date-utils"></a>
+</p>
 
 Library for easier working with date intervals.
 
