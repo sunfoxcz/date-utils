@@ -11,19 +11,19 @@ class DateTime extends NetteDateTime
 	/**
 	 * Get first day of year as DateTime instance
 	 */
-	public static function firstDayOfYear(?int $year = NULL): self
+	public static function firstDayOfYear(?DateTimeInterface $date = NULL): self
 	{
-		$year = self::checkYear($year);
-		return static::from("{$year}-01-01");
+		$date = self::checkDate($date);
+		return static::from(sprintf('%04d-01-01', $date->format('Y')));
 	}
 
 	/**
 	 * Get last day of year as DateTime instance
 	 */
-	public static function lastDayOfYear(?int $year = NULL): self
+	public static function lastDayOfYear(?DateTimeInterface $date = NULL): self
 	{
-		$year = self::checkYear($year);
-		return static::from("{$year}-12-31");
+		$date = self::checkDate($date);
+		return static::from(sprintf('%04d-12-31', $date->format('Y')));
 	}
 
 	/**
@@ -94,11 +94,6 @@ class DateTime extends NetteDateTime
 		}
 
 		return static::from($date->format('Y-m-d') . ' +' . (7 - $dayOfWeek) . ' day');
-	}
-
-	private static function checkYear(?int $year): int
-	{
-		return $year ?: (int) date('Y');
 	}
 
 	private static function checkDate(?DateTimeInterface $date): DateTimeInterface

@@ -68,15 +68,15 @@ final class DateTimeTest extends Tester\TestCase
 
 	public function testFirstDayOfYear(): void
 	{
-		Assert::type(DateTime::class, DateTime::firstDayOfYear(2015));
-		Assert::same('2015-01-01 00:00:00', (string) DateTime::firstDayOfYear(2015));
+		Assert::type(DateTime::class, DateTime::firstDayOfYear(new NativeDateTime('2015-02-15')));
+		Assert::same('2015-01-01 00:00:00', (string) DateTime::firstDayOfYear(new NativeDateTime('2015-02-15')));
 		Assert::same('00:00:00', DateTime::firstDayOfYear()->format('H:i:s'));
 	}
 
 	public function testLastDayOfYear(): void
 	{
-		Assert::type(DateTime::class, DateTime::lastDayOfYear(2015));
-		Assert::same('2015-12-31 00:00:00', (string) DateTime::lastDayOfYear(2015));
+		Assert::type(DateTime::class, DateTime::lastDayOfYear(new NativeDateTime('2015-02-15')));
+		Assert::same('2015-12-31 00:00:00', (string) DateTime::lastDayOfYear(new NativeDateTime('2015-02-15')));
 		Assert::same('00:00:00', DateTime::lastDayOfYear()->format('H:i:s'));
 	}
 }
