@@ -4,7 +4,7 @@ namespace SunfoxTests\DateUtils\Cases;
 
 use DateTime as NativeDateTime;
 use InvalidArgumentException;
-use Nette\Utils\ArrayHash;
+use stdClass;
 use Sunfox\DateUtils\DateIntervalFactory;
 use Sunfox\DateUtils\DateTime;
 use Tester;
@@ -43,7 +43,7 @@ final class DateIntervalFactoryTest extends Tester\TestCase
 
 		$array = DateIntervalFactory::create($start, $end, $interval, $count, $items);
 
-		$expected = new ArrayHash;
+		$expected = new stdClass;
 		$expected->date = new DateTime($expectedDate);
 
 		if ($items) {
@@ -53,7 +53,7 @@ final class DateIntervalFactoryTest extends Tester\TestCase
 		}
 
 		Assert::type('array', $array);
-		Assert::type('Nette\Utils\ArrayHash', $array[$intervalKey]);
+		Assert::type('stdClass', $array[$intervalKey]);
 		Assert::type(DateTime::class, $array[$intervalKey]->date);
 		Assert::equal($expected, $array[$intervalKey]);
 		Assert::count($expectedCount, $array);

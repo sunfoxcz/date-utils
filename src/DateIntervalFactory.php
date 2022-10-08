@@ -4,7 +4,7 @@ namespace Sunfox\DateUtils;
 
 use DateTimeInterface;
 use InvalidArgumentException;
-use Nette\Utils\ArrayHash;
+use stdClass;
 
 final class DateIntervalFactory
 {
@@ -20,7 +20,7 @@ final class DateIntervalFactory
      *
      * @param array<string, mixed>|null $items
      *
-     * @return ArrayHash[]
+     * @return stdClass[]
      */
     public static function create(
         DateTimeInterface $dateFrom,
@@ -34,7 +34,7 @@ final class DateIntervalFactory
         $result = [];
         while ($currentDate <= $dateTo) {
             $intervalKey = self::getIntervalKey($currentDate, $interval);
-            $result[$intervalKey] = new ArrayHash;
+            $result[$intervalKey] = new stdClass;
             $result[$intervalKey]->date = $currentDate;
 
             if ($items) {

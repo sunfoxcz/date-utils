@@ -3,7 +3,6 @@
 namespace Sunfox\DateUtils;
 
 use InvalidArgumentException;
-use Nette\Utils\Strings;
 
 class SpentTime
 {
@@ -28,7 +27,8 @@ class SpentTime
 			return;
 		}
 
-		if (!$match = Strings::match($time, '~^([0-9]{2}):([0-9]{2}):([0-9]{2})$~')) {
+		preg_match('~^([0-9]{2}):([0-9]{2}):([0-9]{2})$~', $time, $match);
+		if (!$match) {
 			throw new InvalidArgumentException("Bad time format: '{$time}'.");
 		}
 
@@ -39,9 +39,9 @@ class SpentTime
 
 	public function __toString(): string
 	{
-		return Strings::padLeft((string) $this->hours, 2, '0') . ':' .
-			Strings::padLeft((string) $this->minutes, 2, '0') . ':' .
-			Strings::padLeft((string) $this->seconds, 2, '0');
+		return str_pad((string) $this->hours, 2, '0', STR_PAD_LEFT) . ':' .
+			str_pad((string) $this->minutes, 2, '0', STR_PAD_LEFT) . ':' .
+			str_pad((string) $this->seconds, 2, '0', STR_PAD_LEFT);
 	}
 
 	public function isZero(): bool
