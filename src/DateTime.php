@@ -3,9 +3,12 @@
 namespace Sunfox\DateUtils;
 
 use DateTime as NativeDateTime;
+use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
+use InvalidArgumentException;
 
-class DateTime extends \DateTimeImmutable implements \JsonSerializable
+class DateTime extends DateTimeImmutable implements \JsonSerializable
 {
 	/** minute in seconds */
 	public const MINUTE = 60;
@@ -31,7 +34,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 	 * @return static
 	 * @throws \Exception if the date and time are not valid.
 	 */
-	public static function from($time)
+	public static function from(string|int|\DateTimeInterface|null $time): static
 	{
 		if ($time instanceof \DateTimeInterface) {
 			return new static($time->format('Y-m-d H:i:s.u'), $time->getTimezone());
@@ -40,7 +43,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 			if ($time <= self::YEAR) {
 				$time += time();
 			}
-			return (new static('@' . $time))->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+			return (new static('@' . $time))->setTimezone(new DateTimeZone(date_default_timezone_get()));
 
 		} else { // textual or null
 			return new static((string) $time);
@@ -50,7 +53,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 	/**
 	 * Creates DateTime object.
 	 * @return static
-	 * @throws \InvalidArgumentException if the date and time are not valid.
+	 * @throws InvalidArgumentException if the date and time are not valid.
 	 */
 	public static function fromParts(
 		int $year,
@@ -59,7 +62,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 		int $hour = 0,
 		int $minute = 0,
 		float $second = 0.0
-	) {
+	): static {
 		$s = sprintf('%04d-%02d-%02d %02d:%02d:%02.5F', $year, $month, $day, $hour, $minute, $second);
 		if (
 			!checkdate($month, $day, $year)
@@ -70,7 +73,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 			|| $second < 0
 			|| $second >= 60
 		) {
-			throw new \InvalidArgumentException("Invalid date '$s'");
+			throw new InvalidArgumentException("Invalid date '$s'");
 		}
 		return new static($s);
 	}
@@ -78,30 +81,24 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 	/**
 	 * Returns new DateTime object formatted according to the specified format.
 	 * @param  string  $format  The format the $time parameter should be in
-	 * @param  string  $time
-	 * @param  string|\DateTimeZone  $timezone (default timezone is used if null is passed)
+	 * @param  string  $datetime
+	 * @param  DateTimeZone  $timezone (default timezone is used if null is passed)
 	 * @return static|false
 	 */
-	public static function createFromFormat($format, $time, $timezone = null)
+	public static function createFromFormat(string $format, string $datetime, ?DateTimeZone $timezone = null): DateTimeImmutable|false
 	{
 		if ($timezone === null) {
-			$timezone = new \DateTimeZone(date_default_timezone_get());
-
-		} elseif (is_string($timezone)) {
-			$timezone = new \DateTimeZone($timezone);
-
-		} elseif (!$timezone instanceof \DateTimeZone) {
-			throw new \InvalidArgumentException('Invalid timezone given');
+			$timezone = new DateTimeZone(date_default_timezone_get());
 		}
 
-		$date = parent::createFromFormat($format, $time, $timezone);
+		$date = parent::createFromFormat($format, $datetime, $timezone);
 		return $date ? static::from($date) : false;
 	}
 
 	/**
 	 * Get first day of year as DateTime instance
 	 */
-	public static function firstDayOfYear(?DateTimeInterface $date = null): self
+	public static function firstDayOfYear(?DateTimeInterface $date = null): static
 	{
 		$date = self::checkDate($date);
 		return static::from(sprintf('%04d-01-01', $date->format('Y')));
@@ -110,7 +107,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 	/**
 	 * Get last day of year as DateTime instance
 	 */
-	public static function lastDayOfYear(?DateTimeInterface $date = null): self
+	public static function lastDayOfYear(?DateTimeInterface $date = null): static
 	{
 		$date = self::checkDate($date);
 		return static::from(sprintf('%04d-12-31', $date->format('Y')));
@@ -119,7 +116,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 	/**
 	 * Get first day of quarter as DateTime instance
 	 */
-	public static function firstDayOfQuarter(?DateTimeInterface $date = null): self
+	public static function firstDayOfQuarter(?DateTimeInterface $date = null): static
 	{
 		$date = self::checkDate($date);
 		$quarter = (int) ceil((int) $date->format('n') / 3);
@@ -130,7 +127,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 	/**
 	 * Get last day of quarter as DateTime instance
 	 */
-	public static function lastDayOfQuarter(?DateTimeInterface $date = null): self
+	public static function lastDayOfQuarter(?DateTimeInterface $date = null): static
 	{
 		$date = self::checkDate($date);
 		$quarter = (int) ceil((int) $date->format('n') / 3);
@@ -141,7 +138,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 	/**
 	 * Get first day of month as DateTime instance
 	 */
-	public static function firstDayOfMonth(?DateTimeInterface $date = null): self
+	public static function firstDayOfMonth(?DateTimeInterface $date = null): static
 	{
 		$date = self::checkDate($date);
 		return static::from($date->format('Y-m-01'));
@@ -150,7 +147,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 	/**
 	 * Get last day of month as DateTime instance
 	 */
-	public static function lastDayOfMonth(?DateTimeInterface $date = null): self
+	public static function lastDayOfMonth(?DateTimeInterface $date = null): static
 	{
 		$date = self::checkDate($date);
 		return static::from($date->format('Y-m-t'));
@@ -159,7 +156,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 	/**
 	 * Get first day of week as DateTime instance
 	 */
-	public static function firstDayOfWeek(?DateTimeInterface $date = null): self
+	public static function firstDayOfWeek(?DateTimeInterface $date = null): static
 	{
 		$date = self::checkDate($date);
 		$dayOfWeek = (int) $date->format('N');
@@ -171,7 +168,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 		return static::from($date->format('Y-m-d') . ' -' . ($dayOfWeek - 1) . ' day');
 	}
 
-	final public function __construct(string $datetime = 'now', ?\DateTimeZone $timezone = null)
+	final public function __construct(string $datetime = 'now', ?DateTimeZone $timezone = null)
 	{
 		parent::__construct($datetime, $timezone);
 	}
@@ -179,7 +176,7 @@ class DateTime extends \DateTimeImmutable implements \JsonSerializable
 	/**
 	 * Get last day of week as DateTime instance
 	 */
-	public static function lastDayOfWeek(?DateTimeInterface $date = null): self
+	public static function lastDayOfWeek(?DateTimeInterface $date = null): static
 	{
 		$date = self::checkDate($date);
 		$dayOfWeek = (int) $date->format('N');

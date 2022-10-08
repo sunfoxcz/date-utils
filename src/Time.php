@@ -7,10 +7,7 @@ use InvalidArgumentException;
 
 final class Time implements ITime
 {
-	/**
-	 * @var int
-	 */
-	private $seconds = 0;
+	private int $seconds = 0;
 
 	/**
 	 * @throws InvalidArgumentException

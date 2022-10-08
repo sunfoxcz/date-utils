@@ -6,20 +6,11 @@ use InvalidArgumentException;
 
 class SpentTime
 {
-	/**
-	 * @var int
-	 */
-	private $hours = 0;
+	private int $hours = 0;
 
-	/**
-	 * @var int
-	 */
-	private $minutes = 0;
+	private int $minutes = 0;
 
-	/**
-	 * @var int
-	 */
-	private $seconds = 0;
+	private int $seconds = 0;
 
 	public function __construct(?string $time = null)
 	{
